@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OFOS - Online Burger Ordering System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- LOGIN PAGE -->
+  <section id="login-page" class="active login-section">
+    <div class="login-container">
+      <h1>🍔 Welcome to OFOS</h1>
+      <p>Please log in to continue</p>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <select id="role">
+        <option value="customer">Customer</option>
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button onclick="login()">Login</button>
+      <p id="login-error" class="error-msg"></p>
+    </div>
+  </section>
+
+  <!-- MAIN SYSTEM -->
+  <div id="main-system" style="display:none;">
+    <header>
+      <h1>🍔 Online Burger Ordering System</h1>
+      <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('menu')">Menu</button>
+        <button onclick="showSection('order')" class="customer-only">My Orders</button>
+        <button onclick="showSection('staff')" class="staff-only">Staff Dashboard</button>
+        <button onclick="showSection('admin')" class="admin-only">Admin Dashboard</button>
+        <button onclick="logout()">Logout</button>
+      </nav>
+    </header>
+
+    <!-- HOME -->
+    <section id="home" class="active">
+      <h2>Welcome to OFOS!</h2>
+      <img src="https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg" alt="Burger" class="hero-img" />
+      <div class="mission-vision">
+        <h3>Our Mission</h3>
+        <p>To deliver freshly made, delicious burgers and provide a seamless online ordering experience for every customer.</p>
+        <h3>Our Vision</h3>
+        <p>To become the leading online burger ordering platform, connecting hungry customers to their favorite flavors anytime, anywhere.</p>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu">
+      <h2>🍟 Our Burger Menu</h2>
+      <div id="menu-list" class="menu-container"></div>
+    </section>
+
+    <!-- CUSTOMER ORDERS -->
+    <section id="order">
+      <h2>🧾 Your Orders</h2>
+      <ul id="cart-list"></ul>
+      <p id="total">Total: ₱0</p>
+      <button onclick="makePayment()">Make Payment</button>
+      <p id="payment-status"></p>
+      <h3>Track Order</h3>
+      <div id="order-status"></div>
+    </section>
+
+    <!-- STAFF -->
+    <section id="staff">
+      <h2>👩‍🍳 Staff Dashboard</h2>
+      <div id="staff-orders"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin">
+      <h2>🧑‍💼 Admin Dashboard</h2>
+      <div class="admin-container">
+        <div class="admin-section">
+          <h3>🍔 Manage Menu</h3>
+          <input type="text" id="newItem" placeholder="Burger Name" />
+          <input type="number" id="newPrice" placeholder="Price" />
+          <input type="file" id="newImage" accept="image/*" />
+          <button onclick="addMenuItem()">Add Item</button>
+
+          <h3>Existing Menu</h3>
+          <div id="admin-menu" class="menu-container"></div>
+        </div>
+
+        <div class="admin-section">
+          <h3>👥 Manage Users</h3>
+          <ul id="user-list">
+            <li>Customer: Aizy</li>
+            <li>Staff: John</li>
+            <li>Admin: Sarah</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 OFOS - Online Burger Ordering System</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
