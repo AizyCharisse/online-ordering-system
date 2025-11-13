@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OFOS - Online Burger Ordering System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- LOGIN PAGE -->
+  <section id="login-page" class="active login-section">
+    <div class="login-container">
+      <h1>🍔 Welcome to Zappy Bite</h1>
+      <p>Please log in to continue</p>
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="email" id="email" placeholder="Email" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <select id="role">
+        <option value="customer">Customer</option>
+        <option value="staff">Staff</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button onclick="login()">Login</button>
+      <p id="login-error" class="error-msg"></p>
+    </div>
+  </section>
+
+  <!-- MAIN SYSTEM -->
+  <div id="main-system" style="display:none;">
+    <header>
+      <h1>🍔 Zappy Bite Burger Ordering System</h1>
+      <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('menu')">Menu</button>
+        <button onclick="showSection('order')" class="customer-only">My Orders</button>
+        <button onclick="showSection('payment')" class="customer-only">Payment Dashboard</button>
+        <button onclick="showSection('staff')" class="staff-only">Staff Dashboard</button>
+        <button onclick="showSection('admin')" class="admin-only">Admin Dashboard</button>
+        <button onclick="logout()">Logout</button>
+      </nav>
+    </header>
+
+    <!-- HOME -->
+<section id="home">
+  <div class="mission-vision">
+    <h2>Our Mission</h2>
+    <p>To deliver freshly made, delicious burgers and provide a seamless online ordering experience for every customer.</p>
+
+    <h2>Our Vision</h2>
+    <p>To become the leading online burger ordering platform, connecting hungry customers to their favorite flavors anytime, anywhere.</p>
+  </div>
+
+  <img src="burger.jpg" alt="Delicious Burger">
+</section>
+
+
+    <!-- MENU -->
+    <section id="menu">
+      <h2>🍟 Our Burger Menu</h2>
+      <div id="menu-list" class="menu-container"></div>
+    </section>
+
+    <!-- CUSTOMER ORDERS -->
+    <section id="order">
+      <h2>🧾 Your Orders</h2>
+      <ul id="cart-list"></ul>
+      <p id="total">Total: ₱0</p>
+      <button onclick="openPaymentDashboard()">Make Payment</button>
+      <p id="payment-status"></p>
+      <h3>Track Order</h3>
+      <div id="order-status"></div>
+    </section>
+
+    <!-- PAYMENT DASHBOARD -->
+    <section id="payment" style="display:none;">
+      <h2>💳 Payment Dashboard</h2>
+      <div class="payment-container">
+        <div class="payment-summary">
+          <h3>Order Summary</h3>
+          <ul id="payment-order-list"></ul>
+          <p><strong>Subtotal:</strong> ₱<span id="subtotal">0</span></p>
+          <p><strong>Delivery Fee:</strong> ₱<span id="delivery-fee">0</span></p>
+          <p><strong>Discount:</strong> ₱<span id="discount">0</span></p>
+          <p><strong>Total:</strong> ₱<span id="final-total">0</span></p>
+        </div>
+
+        <div class="payment-options">
+          <h3>Select Payment Method</h3>
+          <select id="payment-method">
+            <option value="gcash">GCash</option>
+            <option value="credit">Credit/Debit Card</option>
+            <option value="cod">Cash on Delivery</option>
+          </select>
+
+          <h3>Apply Promo Code</h3>
+          <input type="text" id="promo-code" placeholder="Enter code (FIRST20 or BUKO50)" />
+          <button onclick="applyPromo()">Apply</button>
+
+          <h3>Delivery Option</h3>
+          <select id="delivery-option">
+            <option value="zone1">Zone 1 - ₱30 (10-15 mins)</option>
+            <option value="zone2">Zone 2 - ₱50 (20-30 mins)</option>
+            <option value="zone3">Zone 3 - ₱70 (40-50 mins)</option>
+          </select>
+
+          <h3>Delivery Schedule</h3>
+          <select id="delivery-schedule">
+            <option value="asap">ASAP</option>
+            <option value="1-3hrs">In 1-3 hours</option>
+            <option value="tmr">Tomorrow Morning</option>
+          </select>
+
+          <h3>Special Instructions</h3>
+          <textarea id="special-instructions" placeholder="Add notes for delivery..."></textarea>
+
+          <button onclick="confirmPayment()">Confirm Payment</button>
+          <p id="payment-confirmation"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- STAFF -->
+    <section id="staff">
+      <h2>👩‍🍳 Staff Dashboard</h2>
+      <div id="staff-orders"></div>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin">
+      <h2>🧑‍💼 Admin Dashboard</h2>
+      <div class="admin-container">
+        <div class="admin-section">
+          <h3>🍔 Manage Menu</h3>
+          <input type="text" id="newItem" placeholder="Burger Name" />
+          <input type="number" id="newPrice" placeholder="Price" />
+          <input type="file" id="newImage" accept="image/*" />
+          <button onclick="addMenuItem()">Add Item</button>
+
+          <h3>Existing Menu</h3>
+          <div id="admin-menu" class="menu-container"></div>
+        </div>
+
+        <div class="admin-section">
+          <h3>👥 Manage Users</h3>
+          <ul id="user-list">
+            <li>Customer: Aizy</li>
+            <li>Staff: John</li>
+            <li>Admin: Sarah</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 OFOS - Online Burger Ordering System</p>
+    </footer>
+  </div>
+
+  <script>
+    function openPaymentDashboard() {
+      showSection('payment');
+      document.getElementById('payment-confirmation').textContent = '';
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promo-code').value.trim().toUpperCase();
+      let discount = 0;
+      if (code === 'FIRST20') {
+        discount = 0.2;
+        alert('Promo Applied: 20% Off');
+      } else if (code === 'BUKO50') {
+        discount = 50;
+        alert('Promo Applied: ₱50 Off');
+      } else {
+        alert('Invalid Promo Code');
+      }
+      document.getElementById('discount').textContent = discount;
+    }
+
+    function confirmPayment() {
+      const method = document.getElementById('payment-method').value;
+      document.getElementById('payment-confirmation').textContent = 
+        `Payment successful via ${method.toUpperCase()}. Thank you for your order!`;
+    }
+
+    function showSection(sectionId) {
+      document.querySelectorAll('section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+    }
+  </script>
+</body>
+</html>
